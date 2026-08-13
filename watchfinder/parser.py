@@ -88,16 +88,23 @@ MODELS = [
     "Samurai",
     "Monster",
     "HydroMod",
+    "Chronograph",
     "G-Shock",
     "Casioak",
 ]
 
 REF_PATTERNS = [
-    re.compile(r"\b(\d{4,6}[A-Z]{0,4})\b", re.I),  # 16610, 5513, 14060M
+    re.compile(r"\b(SKX\d{3}[A-Z]?)\b", re.I),
+    re.compile(r"\b(SRPE?\d{2,3}[A-Z]?)\b", re.I),
+    re.compile(r"\b(SPB\d{3}[A-Z]?)\b", re.I),
+    re.compile(r"\b(SBTR\d{3}[A-Z]?)\b", re.I),
+    re.compile(r"\b(SND\d{3}[A-Z0-9]*)\b", re.I),
+    re.compile(r"\b(SSC\d{3}[A-Z]?)\b", re.I),
+    re.compile(r"\b(SARB\d{3})\b", re.I),
+    re.compile(r"\b(SRPD\d{2,3}[A-Z]?)\b", re.I),
     re.compile(r"\b(\d{3}\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{3})\b"),  # Omega style
-    re.compile(r"\b(SKX\d{3})\b", re.I),
-    re.compile(r"\b(SRPE\d{2,3})\b", re.I),
-    re.compile(r"\b(SPB\d{3})\b", re.I),
+    re.compile(r"\b(\d{4,6}[A-Z]{0,4})\b", re.I),  # 16610, 5513, 14060M
+    re.compile(r"\b([0-9][A-Z0-9]{2,4})\b", re.I),  # Seiko caliber-ish 8T63
 ]
 
 
@@ -137,13 +144,17 @@ def _find_model(title: str) -> str | None:
 
 
 def _find_reference(title: str) -> str | None:
-    # Prefer references near known brand/model words
     for pattern in REF_PATTERNS:
-        match = pattern.search(title)
-        if match:
+        for match in pattern.finditer(title):
             ref = match.group(1).upper()
-            # Filter out years and tiny numbers
+            # Filter out years
             if ref.isdigit() and (len(ref) == 4 and 1900 <= int(ref) <= 2099):
+                continue
+            # Water-resistance markers like 100M / 200M
+            if len(ref) <= 4 and ref.endswith("M") and ref[:-1].isdigit():
+                continue
+            # Tiny noise tokens
+            if len(ref) < 3:
                 continue
             return ref
     return None

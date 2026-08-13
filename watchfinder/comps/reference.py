@@ -17,48 +17,74 @@ def _load_reference() -> list[dict[str, Any]]:
     return json.loads(DATA_PATH.read_text())
 
 
+def _norm(value: str | None) -> str:
+    return (value or "").strip().lower()
+
+
 class ReferenceCompProvider(CompProvider):
     """Offline secondary-market ranges for popular references.
 
-    Used as a reliable fallback when eBay/Chrono24 scrapes are blocked.
-    Numbers are approximate guides — always verify before bidding.
+    Matching is intentionally strict: brand alone is never enough, because that
+    caused unrelated Seiko chronographs to inherit SKX comps (~$280).
     """
 
     name = "reference"
 
     def lookup(self, query: str, lot: AuctionLot | None = None) -> list[CompSale]:
         rows = _load_reference()
-        brand = (lot.brand if lot else None) or ""
-        model = (lot.model if lot else None) or ""
-        reference = (lot.reference if lot else None) or ""
-        q = (query or "").lower()
+        brand = _norm(lot.brand if lot else None)
+        model = _norm(lot.model if lot else None)
+        reference = _norm(lot.reference if lot else None)
+        title = _norm(lot.title if lot else None)
+        q = _norm(query)
 
+        # Pull reference-like tokens from the title/query when parser missed them.
+        haystack = f"{title} {q}"
         scored: list[tuple[int, dict[str, Any]]] = []
         for row in rows:
+            row_brand = _norm(row.get("brand"))
+            row_model = _norm(row.get("model"))
+            row_ref = _norm(row.get("reference"))
+            row_query = _norm(row.get("query"))
             score = 0
-            if reference and row.get("reference") and reference.upper() == str(row["reference"]).upper():
+
+            if not brand or not row_brand or brand != row_brand:
+                continue
+
+            # Exact reference match is strongest.
+            if reference and row_ref and reference == row_ref:
                 score += 100
-            if brand and row.get("brand") and brand.lower() == row["brand"].lower():
-                score += 40
-            if model and row.get("model") and model.lower() == row["model"].lower():
-                score += 40
-            rq = (row.get("query") or "").lower()
-            if rq and (rq in q or q in rq):
-                score += 20
-            # Token overlap
-            tokens = set(q.split())
-            row_tokens = set(rq.split())
-            score += 5 * len(tokens & row_tokens)
-            if score > 0:
-                scored.append((score, row))
+            elif row_ref and row_ref in haystack.replace(" ", ""):
+                score += 90
+            elif row_ref and reference and reference != row_ref:
+                # Hard no: known different references must not share comps.
+                continue
+
+            # Model family match (Submariner, SKX, Chronograph, etc.).
+            if model and row_model and model == row_model:
+                score += 50
+            elif row_model and row_model in haystack:
+                score += 35
+            elif model and row_model and model != row_model:
+                # Different model families (SKX vs Chronograph) never match.
+                continue
+            elif row_model and not model and row_model not in haystack:
+                # Brand-only lot + specific row model → skip.
+                continue
+
+            if row_query and (row_query in haystack or haystack in row_query):
+                score += 15
+
+            # Require at least model or reference signal beyond bare brand.
+            if score < 35:
+                continue
+            scored.append((score, row))
 
         if not scored:
             return []
 
         scored.sort(key=lambda x: x[0], reverse=True)
         best_score, best = scored[0]
-        if best_score < 40:
-            return []
 
         median = float(best["median_usd"])
         low = float(best.get("low_usd") or median * 0.85)
@@ -70,18 +96,18 @@ class ReferenceCompProvider(CompProvider):
                 source=CompSource.REFERENCE,
                 title=f"{label} (ref low)",
                 price=low,
-                condition=note,
+                condition=f"{note} · match score {best_score}",
             ),
             CompSale(
                 source=CompSource.REFERENCE,
                 title=f"{label} (ref median)",
                 price=median,
-                condition=note,
+                condition=f"{note} · match score {best_score}",
             ),
             CompSale(
                 source=CompSource.REFERENCE,
                 title=f"{label} (ref high)",
                 price=high,
-                condition=note,
+                condition=f"{note} · match score {best_score}",
             ),
         ]

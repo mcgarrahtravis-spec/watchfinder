@@ -56,7 +56,7 @@
     "median_usd": 10000,
     "low_usd": 7000,
     "high_usd": 16000,
-    "notes": "Generic Submariner fallback — verify exact reference"
+    "notes": "Generic Submariner fallback \u2014 verify exact reference"
   },
   {
     "brand": "Rolex",
@@ -211,5 +211,44 @@
     "low_usd": 2000,
     "high_usd": 7000,
     "notes": "Very model-dependent"
+  },
+  {
+    "brand": "Seiko",
+    "model": "Chronograph",
+    "reference": "SND371",
+    "query": "Seiko SND371 chronograph",
+    "median_usd": 95,
+    "low_usd": 60,
+    "high_usd": 140,
+    "notes": "Quartz chrono; common SND37x street range"
+  },
+  {
+    "brand": "Seiko",
+    "model": "Chronograph",
+    "reference": "SBTR015",
+    "query": "Seiko SBTR015 chronograph",
+    "median_usd": 130,
+    "low_usd": 90,
+    "high_usd": 180,
+    "notes": "Seiko quartz chronograph"
+  },
+  {
+    "brand": "Seiko",
+    "model": "Chronograph",
+    "reference": "8T63",
+    "query": "Seiko 8T63 chronograph",
+    "median_usd": 150,
+    "low_usd": 100,
+    "high_usd": 220,
+    "notes": "8T63 quartz chrono movement family"
+  },
+  {
+    "brand": "Seiko",
+    "model": "Chronograph",
+    "query": "Seiko Chronograph quartz",
+    "median_usd": 120,
+    "low_usd": 70,
+    "high_usd": 200,
+    "notes": "Generic Seiko quartz chronograph fallback \u2014 verify exact ref"
   }
 ]
