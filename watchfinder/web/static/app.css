@@ -141,26 +141,96 @@ button:disabled { opacity: 0.6; cursor: wait; transform: none; }
 
 .deal {
   display: grid;
-  grid-template-columns: 1.6fr 0.9fr;
+  grid-template-columns: 160px minmax(0, 1.5fr) 0.85fr;
   gap: 1rem;
   border-top: 1px solid var(--line);
   padding: 1rem 0 0.35rem;
   animation: rise 0.55s ease both;
+  align-items: start;
 }
 
-@media (max-width: 840px) {
+@media (max-width: 960px) {
+  .deal { grid-template-columns: 120px 1fr; }
+  .deal-stats { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
   .deal { grid-template-columns: 1fr; }
 }
 
+.deal-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #0c0a08;
+  text-decoration: none;
+  color: inherit;
+}
+
+.deal-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.deal-media:hover img { transform: scale(1.04); }
+
+.media-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.platform-badge {
+  position: absolute;
+  left: 0.45rem;
+  bottom: 0.45rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.42rem;
+  background: rgba(12, 10, 8, 0.88);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.platform-line {
+  margin: 0 0 0.65rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.platform-line strong { color: var(--ink); font-weight: 700; }
+.platform-line a { color: var(--accent); }
+
 .meta { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.45rem; }
 
-.pill, .src, .time {
+.pill, .src, .time, .house {
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.25rem 0.45rem;
   border: 1px solid var(--line);
 }
+
+.src {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.platform-hibid.src, .platform-badge.platform-hibid { border-color: #d4b36a; color: #d4b36a; }
+.platform-catawiki.src, .platform-badge.platform-catawiki { border-color: #8fb3a0; color: #8fb3a0; }
+.platform-liveauctioneers.src, .platform-badge.platform-liveauctioneers { border-color: #9bb0c9; color: #9bb0c9; }
+.platform-csv.src, .platform-badge.platform-csv { border-color: var(--muted); color: var(--muted); }
 
 .verdict-worth_a_look .pill { border-color: var(--ok); color: var(--ok); }
 .verdict-borderline .pill { border-color: var(--warn); color: var(--warn); }

@@ -1,41 +1,52 @@
 [
   {
     "source": "hibid",
-    "source_id": "demo-1",
+    "source_id": "317445489",
     "title": "Rolex Oyster Perpetual 14060 Submariner",
-    "url": "https://hibid.com/lot/demo-1/rolex-submariner-14060",
-    "current_bid": 4200,
+    "url": "https://hibid.com/lot/317445489/rolex-oyster-perpetual-14060-submariner",
+    "current_bid": 1030,
     "currency": "USD",
-    "bid_count": 12,
-    "auction_house": "Demo Auction Co",
-    "shipping_offered": true
+    "bid_count": 48,
+    "auction_house": "A.J.C.A. LLC",
+    "shipping_offered": true,
+    "image_url": "/static/demo/hibid_0.jpg",
+    "location": "Lexington, KY"
   },
   {
     "source": "catawiki",
-    "source_id": "demo-2",
-    "title": "Omega - Speedmaster - 145.022 - Men - 1969 — Manual winding - Steel",
-    "url": "https://www.catawiki.com/en/l/demo-2",
-    "current_bid": 3100,
+    "source_id": "105929193",
+    "title": "Omega - Speedmaster - 321.10.44.50.01.001 - Men - 2010-2020 — Automatic - Steel",
+    "url": "https://www.catawiki.com/en/l/105929193-omega-speedmaster-321-10-44-50-01-001-men-2010-2020",
+    "current_bid": 3928,
     "currency": "USD",
-    "bid_count": 8,
-    "auction_house": "Catawiki"
-  },
-  {
-    "source": "csv",
-    "source_id": "demo-3",
-    "title": "Seiko SKX007 Black Dial Diver",
-    "url": "https://example.com/lot/demo-3",
-    "current_bid": 95,
-    "currency": "USD",
-    "bid_count": 3
+    "bid_count": 21,
+    "auction_house": "Catawiki",
+    "image_url": "/static/demo/catawiki_0.jpg",
+    "location": "Europe"
   },
   {
     "source": "hibid",
-    "source_id": "demo-4",
-    "title": "Rolex Datejust 36 Steel Jubilee",
-    "url": "https://hibid.com/lot/demo-4/datejust",
-    "current_bid": 6100,
+    "source_id": "317445500",
+    "title": "Rolex Oyster Perpetual 16803 Submariner",
+    "url": "https://hibid.com/lot/317445500/rolex-oyster-perpetual-16803-submariner",
+    "current_bid": 1110,
     "currency": "USD",
-    "bid_count": 21
+    "bid_count": 32,
+    "auction_house": "A.J.C.A. LLC",
+    "shipping_offered": true,
+    "image_url": "/static/demo/hibid_1.jpg",
+    "location": "Lexington, KY"
+  },
+  {
+    "source": "catawiki",
+    "source_id": "105994564",
+    "title": "Omega - Speedmaster AC Milan 100th Anniversary - 3810.51.41 - Men — Automatic - Stainless steel",
+    "url": "https://www.catawiki.com/en/l/105994564-omega-speedmaster-ac-milan-100th-anniversary-world-limited-1999-pieces-3810-51-41-men-2000-2010",
+    "current_bid": 577,
+    "currency": "USD",
+    "bid_count": 13,
+    "auction_house": "Catawiki",
+    "image_url": "/static/demo/catawiki_1.jpg",
+    "location": "Europe"
   }
 ]

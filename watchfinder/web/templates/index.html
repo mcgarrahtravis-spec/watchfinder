@@ -53,11 +53,27 @@
 
       <div class="deal-list">
         {% for deal in result.deals %}
+        {% set platform = deal.lot.source.value.replace('_', ' ') %}
+        {% if platform == 'hibid' %}{% set platform_label = 'HiBid' %}
+        {% elif platform == 'catawiki' %}{% set platform_label = 'Catawiki' %}
+        {% elif platform == 'liveauctioneers' %}{% set platform_label = 'LiveAuctioneers' %}
+        {% elif platform == 'csv' %}{% set platform_label = 'Imported CSV' %}
+        {% else %}{% set platform_label = platform|title %}{% endif %}
         <article class="deal verdict-{{ deal.verdict }}">
+          <a class="deal-media" href="{{ deal.lot.url }}" target="_blank" rel="noopener">
+            {% if deal.lot.image_url %}
+            <img src="{{ deal.lot.image_url }}" alt="{{ deal.lot.title }}" loading="lazy" referrerpolicy="no-referrer" />
+            {% else %}
+            <div class="media-fallback" aria-hidden="true">No photo</div>
+            {% endif %}
+            <span class="platform-badge platform-{{ deal.lot.source.value }}">{{ platform_label }}</span>
+          </a>
+
           <div class="deal-main">
             <div class="meta">
               <span class="pill">{{ deal.verdict.replace('_', ' ') }}</span>
-              <span class="src">{{ deal.lot.source.value }}</span>
+              <span class="src platform-{{ deal.lot.source.value }}">{{ platform_label }}</span>
+              {% if deal.lot.auction_house %}<span class="house">{{ deal.lot.auction_house }}</span>{% endif %}
               {% if deal.lot.time_left %}<span class="time">{{ deal.lot.time_left }}</span>{% endif %}
             </div>
             <h3><a href="{{ deal.lot.url }}" target="_blank" rel="noopener">{{ deal.lot.title }}</a></h3>
@@ -65,6 +81,14 @@
               {{ deal.lot.brand or '—' }}
               {% if deal.lot.model %} · {{ deal.lot.model }}{% endif %}
               {% if deal.lot.reference %} · {{ deal.lot.reference }}{% endif %}
+              {% if deal.lot.location %} · {{ deal.lot.location }}{% endif %}
+            </p>
+            <p class="platform-line">
+              Found on <strong>{{ platform_label }}</strong>
+              {% if deal.lot.auction_house and deal.lot.auction_house != platform_label %}
+              · {{ deal.lot.auction_house }}
+              {% endif %}
+              · <a href="{{ deal.lot.url }}" target="_blank" rel="noopener">Open listing</a>
             </p>
             <ul class="reasons">
               {% for reason in deal.reasons %}
