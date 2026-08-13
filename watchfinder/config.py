@@ -38,6 +38,15 @@ class SourcesConfig(BaseModel):
     csv_path: str | None = None
 
 
+class FilterSettings(BaseModel):
+    max_hours_until_end: float = 24.0
+    require_end_time: bool = True
+    reject_stock_photos: bool = True
+    hibid_stock_threshold: float = 3.0
+    other_stock_threshold: float = 5.0
+    reject_hibid_without_photo: bool = True
+
+
 class AppConfig(BaseModel):
     queries: list[str] = Field(
         default_factory=lambda: [
@@ -50,6 +59,7 @@ class AppConfig(BaseModel):
     sources: SourcesConfig = Field(default_factory=SourcesConfig)
     comps: CompsConfig = Field(default_factory=CompsConfig)
     deal: DealConfig = Field(default_factory=DealConfig)
+    filters: FilterSettings = Field(default_factory=FilterSettings)
     rate_limit_seconds: float = 1.0
     max_lots_per_source: int = 40
 

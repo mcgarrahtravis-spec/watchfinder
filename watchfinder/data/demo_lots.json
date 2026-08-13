@@ -11,37 +11,8 @@
     "shipping_offered": true,
     "image_url": "/static/demo/hibid_0.jpg",
     "location": "Lexington, KY",
-    "ends_at": "2026-08-13T20:21:09.455276+00:00",
-    "time_left": "4h 18m"
-  },
-  {
-    "source": "catawiki",
-    "source_id": "105929193",
-    "title": "Omega - Speedmaster - 321.10.44.50.01.001 - Men - 2010-2020 \u2014 Automatic - Steel",
-    "url": "https://www.catawiki.com/en/l/105929193-omega-speedmaster-321-10-44-50-01-001-men-2010-2020",
-    "current_bid": 3928,
-    "currency": "USD",
-    "bid_count": 21,
-    "auction_house": "Catawiki",
-    "image_url": "/static/demo/catawiki_0.jpg",
-    "location": "Europe",
-    "ends_at": "2026-08-13T17:08:09.455276+00:00",
-    "time_left": "1h 05m"
-  },
-  {
-    "source": "hibid",
-    "source_id": "317445500",
-    "title": "Rolex Oyster Perpetual 16803 Submariner",
-    "url": "https://hibid.com/lot/317445500/rolex-oyster-perpetual-16803-submariner",
-    "current_bid": 1110,
-    "currency": "USD",
-    "bid_count": 32,
-    "auction_house": "A.J.C.A. LLC",
-    "shipping_offered": true,
-    "image_url": "/static/demo/hibid_1.jpg",
-    "location": "Lexington, KY",
-    "ends_at": "2026-08-14T02:45:09.455276+00:00",
-    "time_left": "10h 42m"
+    "ends_at": "2026-08-13T20:27:01.612786+00:00",
+    "time_left": "4h 12m"
   },
   {
     "source": "catawiki",
@@ -54,7 +25,35 @@
     "auction_house": "Catawiki",
     "image_url": "/static/demo/catawiki_1.jpg",
     "location": "Europe",
-    "ends_at": "2026-08-14T19:03:09.455276+00:00",
-    "time_left": "1d 3h"
+    "ends_at": "2026-08-14T10:55:01.612786+00:00",
+    "time_left": "18h 40m"
+  },
+  {
+    "source": "hibid",
+    "source_id": "stock-demo",
+    "title": "Rolex Submariner Date stock photo example",
+    "url": "https://hibid.com/lot/stock-demo",
+    "current_bid": 900,
+    "currency": "USD",
+    "bid_count": 2,
+    "auction_house": "Risky Estate Auctions",
+    "image_url": "/static/demo/stock_like.jpg",
+    "location": "USA",
+    "ends_at": "2026-08-13T18:15:01.612786+00:00",
+    "time_left": "2h"
+  },
+  {
+    "source": "catawiki",
+    "source_id": "too-far",
+    "title": "Omega Speedmaster Professional far auction",
+    "url": "https://www.catawiki.com/en/l/too-far",
+    "current_bid": 2500,
+    "currency": "USD",
+    "bid_count": 5,
+    "auction_house": "Catawiki",
+    "image_url": "/static/demo/catawiki_0.jpg",
+    "location": "Europe",
+    "ends_at": "2026-08-15T04:15:01.612786+00:00",
+    "time_left": "1d 12h"
   }
 ]

@@ -29,9 +29,25 @@
         </div>
 
         <button type="submit" id="scan-btn">Scan auctions</button>
-        <p class="hint">Live scrapes are rate-limited. eBay/Chrono24 comps often fail from datacenter IPs — reference ranges fill the gap.</p>
+        <p class="hint">Only lots ending within 24 hours. Stock/catalog-looking photos (especially on HiBid) are filtered out.</p>
       </form>
     </section>
+
+    {% if result and result.meta %}
+    <section class="filter-bar">
+      <span>Ending within {{ result.meta.get('filter_max_hours', 24)|int }}h</span>
+      <span>Real photos preferred</span>
+      {% if result.meta.get('raw_lot_count') is not none %}
+      <span>Kept {{ result.meta.get('kept', result.lots|length) }} / {{ result.meta.get('raw_lot_count') }} lots</span>
+      {% endif %}
+      {% if result.meta.get('dropped_stock_photos') %}
+      <span>Dropped {{ result.meta.dropped_stock_photos }} stock/catalog</span>
+      {% endif %}
+      {% if result.meta.get('dropped_outside_window') %}
+      <span>Dropped {{ result.meta.dropped_outside_window }} outside window</span>
+      {% endif %}
+    </section>
+    {% endif %}
 
     {% if errors %}
     <section class="errors">

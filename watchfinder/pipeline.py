@@ -17,6 +17,7 @@ from watchfinder.comps import (
     summarize_comps,
 )
 from watchfinder.config import AppConfig
+from watchfinder.filters import FilterConfig, filter_lots
 from watchfinder.models import AuctionLot, DealOpportunity, ScanResult
 from watchfinder.parser import parse_watch_title
 from watchfinder.scoring import score_deal
@@ -109,6 +110,22 @@ def run_scan(cfg: AppConfig | None = None, queries: list[str] | None = None) -> 
             errors.append(f"{source.name}: {exc}")
 
     lots = [enrich_lot(lot) for lot in lots]
+    raw_count = len(lots)
+
+    filter_cfg = FilterConfig(**cfg.filters.model_dump())
+    lots, filter_notes, filter_meta = filter_lots(lots, filter_cfg)
+    meta.update(filter_meta)
+    meta["raw_lot_count"] = raw_count
+    # Keep filter notes short in the UI — summarize plus a few examples.
+    if filter_notes:
+        summary = (
+            f"Filters removed {raw_count - len(lots)} lots "
+            f"(outside {cfg.filters.max_hours_until_end:.0f}h window: "
+            f"{filter_meta['dropped_outside_window']}, "
+            f"stock/catalog photos: {filter_meta['dropped_stock_photos']})"
+        )
+        errors.append(summary)
+        errors.extend(filter_notes[:8])
 
     # Cache comps by query key to avoid hammering providers
     comps_cache: dict[str, Any] = {}

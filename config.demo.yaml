@@ -29,3 +29,11 @@ deal:
 
 rate_limit_seconds: 1.0
 max_lots_per_source: 40
+
+filters:
+  max_hours_until_end: 24
+  require_end_time: true
+  reject_stock_photos: true
+  hibid_stock_threshold: 3.0
+  other_stock_threshold: 5.0
+  reject_hibid_without_photo: true
