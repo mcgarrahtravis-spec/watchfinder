@@ -24,9 +24,9 @@ _last_result = None
 async def index(request: Request) -> HTMLResponse:
     cfg = load_config()
     return templates.TemplateResponse(
+        request,
         "index.html",
         {
-            "request": request,
             "result": _last_result,
             "default_queries": "\n".join(cfg.queries),
             "errors": (_last_result.errors if _last_result else []),
@@ -58,9 +58,9 @@ async def scan(
     cfg.max_lots_per_source = min(cfg.max_lots_per_source, 20)
     _last_result = run_scan(cfg, queries=query_list)
     return templates.TemplateResponse(
+        request,
         "index.html",
         {
-            "request": request,
             "result": _last_result,
             "default_queries": "\n".join(query_list),
             "errors": _last_result.errors,
