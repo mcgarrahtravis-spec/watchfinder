@@ -68,6 +68,25 @@ See `config.example.yaml`:
 - Reference ranges are approximate guides for popular references — always verify the exact reference, condition, and completeness before bidding.
 - Buyer premiums vary by auction house; adjust `config.yaml` for houses you use often.
 
+## Deploy
+
+### Quick public URL (temporary)
+While the cloud agent is running, a Cloudflare quick tunnel can expose the dashboard.
+
+### Render / Railway / Docker
+```bash
+# Docker
+docker build -t watchfinder .
+docker run --rm -p 8000:8000 watchfinder
+
+# Render: connect this repo and use render.yaml (free web service)
+# Or set start command:
+#   uvicorn watchfinder.web.app:app --host 0.0.0.0 --port $PORT
+# with WATCHFINDER_CONFIG=config.demo.yaml
+```
+
+`config.demo.yaml` ships demo lots with photos so the first page load shows opportunities immediately. Flip `sources.hibid` / `sources.catawiki` to `true` for live scans on a host with egress.
+
 ## Tests
 
 ```bash

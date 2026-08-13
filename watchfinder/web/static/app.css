@@ -285,6 +285,40 @@ button:disabled { opacity: 0.6; cursor: wait; transform: none; }
   font-weight: 400;
 }
 
+.stat-time {
+  grid-column: 1 / -1;
+  background: rgba(196, 163, 90, 0.08);
+  border-color: rgba(196, 163, 90, 0.45) !important;
+}
+
+.stat-time .countdown {
+  font-family: var(--sans);
+  font-size: clamp(1.85rem, 3.4vw, 2.55rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--accent);
+}
+
+.stat-time.ending-soon {
+  background: rgba(196, 107, 90, 0.12);
+  border-color: rgba(196, 107, 90, 0.55) !important;
+}
+
+.stat-time.ending-soon .countdown {
+  color: #e08a78;
+  animation: pulse-time 1.1s ease infinite;
+}
+
+.stat-time.ended .countdown {
+  color: var(--muted);
+}
+
+@keyframes pulse-time {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.72; }
+}
+
 body.scanning .scan-panel {
   animation: pulse 1.2s ease infinite;
 }

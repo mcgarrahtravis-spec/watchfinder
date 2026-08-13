@@ -178,7 +178,12 @@ class HiBidSource(AuctionSource):
                 current = high_bid or None
             est_low, est_high = _parse_estimate(item.get("estimate"))
             ends_at = None
-            if auction.get("eventDateEnd"):
+            time_left = (state.get("timeLeft") or "").strip() or None
+            tls = state.get("timeLeftSeconds")
+            if isinstance(tls, (int, float)) and tls > 0:
+                ends_at = datetime.now(timezone.utc).timestamp() + float(tls)
+                ends_at = datetime.fromtimestamp(ends_at, tz=timezone.utc)
+            elif auction.get("eventDateEnd"):
                 try:
                     ends_at = datetime.fromisoformat(auction["eventDateEnd"]).replace(
                         tzinfo=timezone.utc
@@ -207,7 +212,7 @@ class HiBidSource(AuctionSource):
                     estimate_high=est_high,
                     buy_now=float(buy_now) if buy_now else None,
                     ends_at=ends_at,
-                    time_left=(state.get("timeLeft") or "").strip() or None,
+                    time_left=time_left,
                     location=location or None,
                     auction_house=auctioneer.get("name") or auction.get("eventName"),
                     image_url=image,

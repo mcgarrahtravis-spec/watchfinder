@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from fastapi import FastAPI, Form, Request
@@ -20,23 +21,49 @@ app.mount("/static", StaticFiles(directory=str(BASE / "static")), name="static")
 _last_result = None
 
 
+def _template_context(request: Request, cfg=None, queries: list[str] | None = None):
+    cfg = cfg or load_config()
+    query_list = queries or cfg.queries
+    return {
+        "result": _last_result,
+        "default_queries": "\n".join(query_list),
+        "errors": (_last_result.errors if _last_result else []),
+        "sources": {
+            "hibid": cfg.sources.hibid,
+            "catawiki": cfg.sources.catawiki,
+            "liveauctioneers": cfg.sources.liveauctioneers,
+        },
+    }
+
+
+@app.on_event("startup")
+def warmup_demo_scan() -> None:
+    """Preload results so a fresh deploy shows opportunities immediately."""
+    global _last_result
+    if os.getenv("WATCHFINDER_SKIP_WARMUP") == "1":
+        return
+    cfg = load_config()
+    # Prefer demo CSV on first paint when configured; otherwise light live scan.
+    if cfg.sources.csv_path:
+        cfg.sources.hibid = False
+        cfg.sources.catawiki = False
+        cfg.sources.liveauctioneers = False
+    else:
+        cfg.max_lots_per_source = min(cfg.max_lots_per_source, 8)
+    try:
+        _last_result = run_scan(cfg)
+    except Exception as exc:  # noqa: BLE001
+        print(f"warmup scan failed: {exc}")
+
+
+@app.get("/health")
+async def health() -> dict[str, str]:
+    return {"status": "ok"}
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request) -> HTMLResponse:
-    cfg = load_config()
-    return templates.TemplateResponse(
-        request,
-        "index.html",
-        {
-            "result": _last_result,
-            "default_queries": "\n".join(cfg.queries),
-            "errors": (_last_result.errors if _last_result else []),
-            "sources": {
-                "hibid": cfg.sources.hibid,
-                "catawiki": cfg.sources.catawiki,
-                "liveauctioneers": cfg.sources.liveauctioneers,
-            },
-        },
-    )
+    return templates.TemplateResponse(request, "index.html", _template_context(request))
 
 
 @app.post("/scan", response_class=HTMLResponse)
@@ -52,6 +79,7 @@ async def scan(
     query_list = [q.strip() for q in queries.splitlines() if q.strip()]
     if not query_list:
         query_list = cfg.queries
+    # Keep CSV import if configured; checkboxes control live sources.
     cfg.sources.hibid = include_hibid is not None
     cfg.sources.catawiki = include_catawiki is not None
     cfg.sources.liveauctioneers = include_liveauctioneers is not None
@@ -60,16 +88,7 @@ async def scan(
     return templates.TemplateResponse(
         request,
         "index.html",
-        {
-            "result": _last_result,
-            "default_queries": "\n".join(query_list),
-            "errors": _last_result.errors,
-            "sources": {
-                "hibid": cfg.sources.hibid,
-                "catawiki": cfg.sources.catawiki,
-                "liveauctioneers": cfg.sources.liveauctioneers,
-            },
-        },
+        _template_context(request, cfg=cfg, queries=query_list),
     )
 
 

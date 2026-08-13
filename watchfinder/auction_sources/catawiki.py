@@ -66,6 +66,37 @@ class CatawikiSource(AuctionSource):
         top = max(bids, key=lambda b: float(b.get("amount") or 0))
         return float(top["amount"]), len(bids)
 
+    def _lot_end_time(self, lot_id: int | str) -> datetime | None:
+        """Pull bidding end time from the public lot page."""
+        try:
+            resp = self._get(f"https://www.catawiki.com/en/l/{lot_id}")
+        except Exception:  # noqa: BLE001
+            return None
+        soup = BeautifulSoup(resp.text, "html.parser")
+        node = soup.find("script", id="__NEXT_DATA__")
+        if not node or not node.string:
+            return None
+        try:
+            data = json.loads(node.string)
+        except json.JSONDecodeError:
+            return None
+        page = data.get("props", {}).get("pageProps", {})
+        block = page.get("biddingBlockResponse") or {}
+        end_ms = block.get("biddingEndTime")
+        if isinstance(end_ms, (int, float)) and end_ms > 0:
+            return datetime.fromtimestamp(end_ms / 1000, tz=timezone.utc)
+        # SEO fallback
+        offers = (
+            ((page.get("lotDetailsData") or {}).get("seo") or {}).get("ldSchema") or {}
+        ).get("offers") or {}
+        valid = offers.get("priceValidUntil")
+        if valid:
+            try:
+                return datetime.fromisoformat(valid.replace("Z", "+00:00"))
+            except ValueError:
+                return None
+        return None
+
     def search(self, query: str) -> list[AuctionLot]:
         cards = self._search_lot_cards(query)
         lots: list[AuctionLot] = []
@@ -77,10 +108,14 @@ class CatawikiSource(AuctionSource):
                 continue
             parsed = parse_watch_title(full_title, fallback_query=query)
             lot_id = str(card["id"])
-            # Enrich with live bid (rate-limited)
             current_bid, bid_count = self._current_bid(lot_id)
-            ends_at = None
-            # bidding end isn't always on search card; leave None
+            ends_at = self._lot_end_time(lot_id)
+            time_left = None
+            if ends_at:
+                seconds = max(0, int((ends_at - datetime.now(timezone.utc)).total_seconds()))
+                hours, rem = divmod(seconds, 3600)
+                minutes, _ = divmod(rem, 60)
+                time_left = f"{hours}h {minutes:02d}m"
             buy_now = None
             if card.get("buyNow") and isinstance(card["buyNow"], dict):
                 buy_now = card["buyNow"].get("amount")
@@ -96,6 +131,7 @@ class CatawikiSource(AuctionSource):
                     bid_count=bid_count,
                     buy_now=float(buy_now) if buy_now else None,
                     ends_at=ends_at,
+                    time_left=time_left,
                     image_url=card.get("thumbImageUrl") or card.get("originalImageUrl"),
                     auction_house="Catawiki",
                     brand=parsed.brand,

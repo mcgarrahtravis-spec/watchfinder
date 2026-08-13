@@ -74,7 +74,6 @@
               <span class="pill">{{ deal.verdict.replace('_', ' ') }}</span>
               <span class="src platform-{{ deal.lot.source.value }}">{{ platform_label }}</span>
               {% if deal.lot.auction_house %}<span class="house">{{ deal.lot.auction_house }}</span>{% endif %}
-              {% if deal.lot.time_left %}<span class="time">{{ deal.lot.time_left }}</span>{% endif %}
             </div>
             <h3><a href="{{ deal.lot.url }}" target="_blank" rel="noopener">{{ deal.lot.title }}</a></h3>
             <p class="identity">
@@ -97,6 +96,11 @@
             </ul>
           </div>
           <div class="deal-stats">
+            <div class="stat-time"
+                 {% if deal.lot.ends_at %}data-ends-at="{{ deal.lot.ends_at.isoformat() }}"{% endif %}>
+              <span>Time remaining</span>
+              <strong class="countdown">{{ deal.lot.time_left or '—' }}</strong>
+            </div>
             <div><span>Bid</span><strong>{% if deal.lot.current_bid is not none %}${{ '%.0f'|format(deal.lot.current_bid) }}{% else %}—{% endif %}</strong></div>
             <div><span>All-in</span><strong>{% if deal.all_in_cost is not none %}${{ '%.0f'|format(deal.all_in_cost) }}{% else %}—{% endif %}</strong></div>
             <div><span>Market</span><strong>{% if deal.market_value is not none %}${{ '%.0f'|format(deal.market_value) }}{% else %}—{% endif %}</strong></div>
@@ -117,6 +121,33 @@
       btn.textContent = 'Scanning…';
       document.body.classList.add('scanning');
     });
+
+    function formatRemaining(ms) {
+      if (ms <= 0) return 'ENDED';
+      const totalSec = Math.floor(ms / 1000);
+      const days = Math.floor(totalSec / 86400);
+      const hours = Math.floor((totalSec % 86400) / 3600);
+      const minutes = Math.floor((totalSec % 3600) / 60);
+      const seconds = totalSec % 60;
+      if (days > 0) return `${days}d ${hours}h ${String(minutes).padStart(2,'0')}m`;
+      if (hours > 0) return `${hours}h ${String(minutes).padStart(2,'0')}m ${String(seconds).padStart(2,'0')}s`;
+      return `${minutes}m ${String(seconds).padStart(2,'0')}s`;
+    }
+
+    function tickCountdowns() {
+      document.querySelectorAll('.stat-time[data-ends-at]').forEach((el) => {
+        const ends = Date.parse(el.dataset.endsAt);
+        if (Number.isNaN(ends)) return;
+        const label = el.querySelector('.countdown');
+        if (!label) return;
+        const remaining = ends - Date.now();
+        label.textContent = formatRemaining(remaining);
+        el.classList.toggle('ending-soon', remaining > 0 && remaining < 6 * 3600 * 1000);
+        el.classList.toggle('ended', remaining <= 0);
+      });
+    }
+    tickCountdowns();
+    setInterval(tickCountdowns, 1000);
   </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
@@ -66,7 +67,18 @@ class Settings(BaseSettings):
 
 def load_config(path: str | Path | None = None) -> AppConfig:
     if path is None:
-        for candidate in (Path("config.yaml"), Path("config.example.yaml")):
+        env_path = os.getenv("WATCHFINDER_CONFIG")
+        candidates = []
+        if env_path:
+            candidates.append(Path(env_path))
+        candidates.extend(
+            [
+                Path("config.yaml"),
+                Path("config.demo.yaml"),
+                Path("config.example.yaml"),
+            ]
+        )
+        for candidate in candidates:
             if candidate.exists():
                 path = candidate
                 break

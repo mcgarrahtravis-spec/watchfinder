@@ -41,7 +41,16 @@ class CsvImportSource(AuctionSource):
             if key in seen:
                 continue
             title_l = lot.title.lower()
-            if any(q.lower() in title_l for q in queries):
+            matched = False
+            for q in queries:
+                tokens = [t for t in q.lower().split() if t]
+                if tokens and all(t in title_l for t in tokens):
+                    matched = True
+                    break
+                if q.lower() in title_l:
+                    matched = True
+                    break
+            if matched:
                 seen.add(key)
                 out.append(lot)
         return out[: self.max_lots]
@@ -64,6 +73,8 @@ class CsvImportSource(AuctionSource):
             return [self._row_to_lot(row) for row in reader]
 
     def _row_to_lot(self, row: dict[str, Any]) -> AuctionLot:
+        from datetime import datetime, timezone
+
         title = str(row.get("title") or "").strip()
         parsed = parse_watch_title(title)
         source_raw = str(row.get("source") or "csv").lower()
@@ -72,6 +83,15 @@ class CsvImportSource(AuctionSource):
         except ValueError:
             source = SourceName.CSV
         current = row.get("current_bid")
+        ends_at = None
+        raw_end = row.get("ends_at")
+        if raw_end:
+            try:
+                ends_at = datetime.fromisoformat(str(raw_end).replace("Z", "+00:00"))
+                if ends_at.tzinfo is None:
+                    ends_at = ends_at.replace(tzinfo=timezone.utc)
+            except ValueError:
+                ends_at = None
         return AuctionLot(
             source=source if source != SourceName.CSV else SourceName.CSV,
             source_id=str(row.get("source_id") or row.get("id") or title[:40]),
@@ -80,6 +100,8 @@ class CsvImportSource(AuctionSource):
             current_bid=float(current) if current not in (None, "") else None,
             currency=str(row.get("currency") or "USD"),
             bid_count=int(row["bid_count"]) if row.get("bid_count") not in (None, "") else None,
+            ends_at=ends_at,
+            time_left=row.get("time_left"),
             location=row.get("location"),
             auction_house=row.get("auction_house"),
             image_url=row.get("image_url"),
