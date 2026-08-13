@@ -1,0 +1,41 @@
+[
+  {
+    "source": "hibid",
+    "source_id": "demo-1",
+    "title": "Rolex Oyster Perpetual 14060 Submariner",
+    "url": "https://hibid.com/lot/demo-1/rolex-submariner-14060",
+    "current_bid": 4200,
+    "currency": "USD",
+    "bid_count": 12,
+    "auction_house": "Demo Auction Co",
+    "shipping_offered": true
+  },
+  {
+    "source": "catawiki",
+    "source_id": "demo-2",
+    "title": "Omega - Speedmaster - 145.022 - Men - 1969 — Manual winding - Steel",
+    "url": "https://www.catawiki.com/en/l/demo-2",
+    "current_bid": 3100,
+    "currency": "USD",
+    "bid_count": 8,
+    "auction_house": "Catawiki"
+  },
+  {
+    "source": "csv",
+    "source_id": "demo-3",
+    "title": "Seiko SKX007 Black Dial Diver",
+    "url": "https://example.com/lot/demo-3",
+    "current_bid": 95,
+    "currency": "USD",
+    "bid_count": 3
+  },
+  {
+    "source": "hibid",
+    "source_id": "demo-4",
+    "title": "Rolex Datejust 36 Steel Jubilee",
+    "url": "https://hibid.com/lot/demo-4/datejust",
+    "current_bid": 6100,
+    "currency": "USD",
+    "bid_count": 21
+  }
+]

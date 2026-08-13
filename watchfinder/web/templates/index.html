@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WatchFinder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <div class="grain"></div>
+  <header class="top">
+    <div class="brand">WatchFinder</div>
+    <p class="tagline">Auction lots vs secondary-market comps — find flip candidates faster.</p>
+  </header>
+
+  <main>
+    <section class="scan-panel">
+      <form method="post" action="/scan" id="scan-form">
+        <label for="queries">Search queries <span>(one per line)</span></label>
+        <textarea id="queries" name="queries" rows="6">{{ default_queries }}</textarea>
+
+        <div class="source-row">
+          <label><input type="checkbox" name="include_hibid" {% if not sources or sources.hibid %}checked{% endif %} /> HiBid</label>
+          <label><input type="checkbox" name="include_catawiki" {% if not sources or sources.catawiki %}checked{% endif %} /> Catawiki</label>
+          <label><input type="checkbox" name="include_liveauctioneers" {% if sources and sources.liveauctioneers %}checked{% endif %} /> LiveAuctioneers</label>
+        </div>
+
+        <button type="submit" id="scan-btn">Scan auctions</button>
+        <p class="hint">Live scrapes are rate-limited. eBay/Chrono24 comps often fail from datacenter IPs — reference ranges fill the gap.</p>
+      </form>
+    </section>
+
+    {% if errors %}
+    <section class="errors">
+      <h2>Source notes</h2>
+      <ul>
+        {% for err in errors %}
+        <li>{{ err }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if result %}
+    <section class="results">
+      <div class="results-head">
+        <h2>Opportunities</h2>
+        <p>{{ result.lots|length }} lots · scanned {{ result.scanned_at }}</p>
+      </div>
+
+      <div class="deal-list">
+        {% for deal in result.deals %}
+        <article class="deal verdict-{{ deal.verdict }}">
+          <div class="deal-main">
+            <div class="meta">
+              <span class="pill">{{ deal.verdict.replace('_', ' ') }}</span>
+              <span class="src">{{ deal.lot.source.value }}</span>
+              {% if deal.lot.time_left %}<span class="time">{{ deal.lot.time_left }}</span>{% endif %}
+            </div>
+            <h3><a href="{{ deal.lot.url }}" target="_blank" rel="noopener">{{ deal.lot.title }}</a></h3>
+            <p class="identity">
+              {{ deal.lot.brand or '—' }}
+              {% if deal.lot.model %} · {{ deal.lot.model }}{% endif %}
+              {% if deal.lot.reference %} · {{ deal.lot.reference }}{% endif %}
+            </p>
+            <ul class="reasons">
+              {% for reason in deal.reasons %}
+              <li>{{ reason }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="deal-stats">
+            <div><span>Bid</span><strong>{% if deal.lot.current_bid is not none %}${{ '%.0f'|format(deal.lot.current_bid) }}{% else %}—{% endif %}</strong></div>
+            <div><span>All-in</span><strong>{% if deal.all_in_cost is not none %}${{ '%.0f'|format(deal.all_in_cost) }}{% else %}—{% endif %}</strong></div>
+            <div><span>Market</span><strong>{% if deal.market_value is not none %}${{ '%.0f'|format(deal.market_value) }}{% else %}—{% endif %}</strong></div>
+            <div><span>Margin</span><strong>{% if deal.margin_pct is not none %}{{ '%.0f'|format(deal.margin_pct * 100) }}%{% else %}—{% endif %}</strong></div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+  </main>
+
+  <script>
+    const form = document.getElementById('scan-form');
+    const btn = document.getElementById('scan-btn');
+    form?.addEventListener('submit', () => {
+      btn.disabled = true;
+      btn.textContent = 'Scanning…';
+      document.body.classList.add('scanning');
+    });
+  </script>
+</body>
+</html>

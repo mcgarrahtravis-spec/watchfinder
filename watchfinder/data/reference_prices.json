@@ -1,0 +1,215 @@
+[
+  {
+    "brand": "Rolex",
+    "model": "Submariner",
+    "reference": "14060",
+    "query": "Rolex Submariner 14060",
+    "median_usd": 7800,
+    "low_usd": 6500,
+    "high_usd": 9500,
+    "notes": "No-date Submariner approx secondary range"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Submariner",
+    "reference": "16610",
+    "query": "Rolex Submariner 16610",
+    "median_usd": 9500,
+    "low_usd": 8000,
+    "high_usd": 11500,
+    "notes": "Date Submariner 16610 approx"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Submariner",
+    "reference": "16803",
+    "query": "Rolex Submariner 16803",
+    "median_usd": 7200,
+    "low_usd": 5800,
+    "high_usd": 9000,
+    "notes": "Two-tone Submariner approx"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Submariner",
+    "reference": "5513",
+    "query": "Rolex Submariner 5513",
+    "median_usd": 14000,
+    "low_usd": 10000,
+    "high_usd": 22000,
+    "notes": "Vintage; wide condition-driven spread"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Submariner",
+    "reference": "5512",
+    "query": "Rolex Submariner 5512",
+    "median_usd": 18000,
+    "low_usd": 12000,
+    "high_usd": 30000,
+    "notes": "Vintage; authenticity/condition critical"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Submariner",
+    "query": "Rolex Submariner",
+    "median_usd": 10000,
+    "low_usd": 7000,
+    "high_usd": 16000,
+    "notes": "Generic Submariner fallback — verify exact reference"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Datejust",
+    "query": "Rolex Datejust",
+    "median_usd": 5500,
+    "low_usd": 3500,
+    "high_usd": 9000,
+    "notes": "Broad Datejust range; metal/size dominate"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Explorer",
+    "reference": "214270",
+    "query": "Rolex Explorer 214270",
+    "median_usd": 7200,
+    "low_usd": 6000,
+    "high_usd": 8500,
+    "notes": null
+  },
+  {
+    "brand": "Rolex",
+    "model": "GMT-Master",
+    "query": "Rolex GMT-Master",
+    "median_usd": 14000,
+    "low_usd": 9000,
+    "high_usd": 22000,
+    "notes": "Includes vintage and modern Pepsi/Batman ranges"
+  },
+  {
+    "brand": "Rolex",
+    "model": "Daytona",
+    "query": "Rolex Daytona",
+    "median_usd": 22000,
+    "low_usd": 14000,
+    "high_usd": 40000,
+    "notes": "Huge spread by reference/material"
+  },
+  {
+    "brand": "Omega",
+    "model": "Speedmaster",
+    "query": "Omega Speedmaster",
+    "median_usd": 4200,
+    "low_usd": 2800,
+    "high_usd": 7000,
+    "notes": "Professional / reduced / modern mix"
+  },
+  {
+    "brand": "Omega",
+    "model": "Seamaster",
+    "query": "Omega Seamaster",
+    "median_usd": 3200,
+    "low_usd": 1800,
+    "high_usd": 5500,
+    "notes": null
+  },
+  {
+    "brand": "Tudor",
+    "model": "Black Bay",
+    "query": "Tudor Black Bay",
+    "median_usd": 2800,
+    "low_usd": 2000,
+    "high_usd": 4000,
+    "notes": null
+  },
+  {
+    "brand": "Tudor",
+    "model": "Pelagos",
+    "query": "Tudor Pelagos",
+    "median_usd": 3200,
+    "low_usd": 2500,
+    "high_usd": 4200,
+    "notes": null
+  },
+  {
+    "brand": "Cartier",
+    "model": "Tank",
+    "query": "Cartier Tank",
+    "median_usd": 3500,
+    "low_usd": 1800,
+    "high_usd": 8000,
+    "notes": "Mustique / Must / Louis / Solo differ widely"
+  },
+  {
+    "brand": "Cartier",
+    "model": "Santos",
+    "query": "Cartier Santos",
+    "median_usd": 4500,
+    "low_usd": 2800,
+    "high_usd": 7500,
+    "notes": null
+  },
+  {
+    "brand": "Seiko",
+    "model": "SKX",
+    "reference": "SKX007",
+    "query": "Seiko SKX007",
+    "median_usd": 280,
+    "low_usd": 180,
+    "high_usd": 400,
+    "notes": "Discontinued; mods affect price"
+  },
+  {
+    "brand": "Seiko",
+    "model": "SKX",
+    "query": "Seiko SKX",
+    "median_usd": 250,
+    "low_usd": 150,
+    "high_usd": 380,
+    "notes": null
+  },
+  {
+    "brand": "Seiko",
+    "model": "Prospex",
+    "query": "Seiko Prospex",
+    "median_usd": 450,
+    "low_usd": 250,
+    "high_usd": 900,
+    "notes": null
+  },
+  {
+    "brand": "Tag Heuer",
+    "model": "Carrera",
+    "query": "Tag Heuer Carrera",
+    "median_usd": 1800,
+    "low_usd": 900,
+    "high_usd": 3500,
+    "notes": null
+  },
+  {
+    "brand": "Breitling",
+    "model": "Navitimer",
+    "query": "Breitling Navitimer",
+    "median_usd": 3200,
+    "low_usd": 1800,
+    "high_usd": 5500,
+    "notes": null
+  },
+  {
+    "brand": "Longines",
+    "model": "HydroConquest",
+    "query": "Longines HydroConquest",
+    "median_usd": 900,
+    "low_usd": 550,
+    "high_usd": 1400,
+    "notes": null
+  },
+  {
+    "brand": "Grand Seiko",
+    "query": "Grand Seiko",
+    "median_usd": 3500,
+    "low_usd": 2000,
+    "high_usd": 7000,
+    "notes": "Very model-dependent"
+  }
+]

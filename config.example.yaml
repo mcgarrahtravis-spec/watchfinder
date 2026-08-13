@@ -1,0 +1,34 @@
+# Copy to config.yaml and adjust.
+
+queries:
+  - Rolex Submariner
+  - Rolex Datejust
+  - Omega Speedmaster
+  - Tudor Black Bay
+  - Seiko SKX
+  - Cartier Tank
+
+sources:
+  hibid: true
+  catawiki: true
+  liveauctioneers: false   # often blocked by bot protection
+  csv_path: null           # optional path to imported auction CSV/JSON
+
+comps:
+  use_reference: true      # built-in secondary-market ranges
+  use_ebay: true           # best-effort; often blocked from datacenter IPs
+  use_chrono24: true       # best-effort asking prices
+  max_comps_per_query: 8
+
+deal:
+  min_margin_pct: 0.18     # 18% after estimated fees
+  buyer_premium_pct:
+    hibid: 0.15
+    catawiki: 0.12
+    liveauctioneers: 0.20
+    csv: 0.15
+  estimated_shipping_usd: 35
+  currency: USD
+
+rate_limit_seconds: 1.0
+max_lots_per_source: 40
